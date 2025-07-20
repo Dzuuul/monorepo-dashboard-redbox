@@ -1,135 +1,282 @@
-# Turborepo starter
+# 🚀 Dashboard Monorepo Redbox
 
-This Turborepo starter is maintained by the Turborepo core team.
+Sebuah turborepo modern yang dibangun dengan **Next.js 15**, **React 19**, dan **TypeScript** untuk dashboard enterprise yang scalable dan maintainable.
 
-## Using this example
+## 📋 Daftar Isi
 
-Run the following command:
+- [🏗️ Struktur Proyek](#️-struktur-proyek)
+- [🚀 Quick Start](#-quick-start)
+- [📦 Aplikasi & Package](#-aplikasi--package)
+- [🛠️ Scripts](#️-scripts)
+- [🔧 Teknologi](#-teknologi)
+- [📝 Catatan Penting](#-catatan-penting)
+- [🤝 Contributing](#-contributing)
 
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 🏗️ Struktur Proyek
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+dashboard-monorepo-redbox/
+├── apps/
+│   ├── api/                 # Backend API (Fastify + GraphQL)
+│   └── web/                 # Frontend Dashboard (Next.js 15)
+├── packages/
+│   ├── eslint-config/       # Shared ESLint configuration
+│   ├── typescript-config/   # Shared TypeScript configuration
+│   └── ui/                  # Shared UI components
+├── turbo.json               # Turborepo configuration
+├── pnpm-workspace.yaml      # PNPM workspace configuration
+└── package.json             # Root package.json
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 🚀 Quick Start
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Prerequisites
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+- **Node.js**: `>=20.11.0`
+- **PNPM**: `>=10.12.4`
+- **NPM**: `>=10.0.0`
 
-### Develop
+### Installation
 
-To develop all apps and packages, run the following command:
+```bash
+# Clone repository
+git clone <repository-url>
+cd dashboard-monorepo-redbox
 
-```
-cd my-turborepo
+# Install dependencies
+pnpm install
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# Start development servers
+pnpm dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Development Commands
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+```bash
+# Start all applications in development mode
+pnpm dev
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+# Build all applications
+pnpm build
 
-### Remote Caching
+# Lint all applications
+pnpm lint
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+# Check TypeScript types
+pnpm check-types
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+# Format code
+pnpm format
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## 📦 Aplikasi & Package
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### 🖥️ Apps
+
+#### **Web Dashboard** (`apps/web`)
+
+- **Framework**: Next.js 15 dengan Turbopack
+- **UI Library**: React 19 + Radix UI
+- **Styling**: Tailwind CSS v4
+- **State Management**: Zustand
+- **Validation**: Zod
+- **Port**: 3000
+
+**Fitur Utama:**
+
+- Dashboard interaktif dengan drag & drop
+- Sistem autentikasi
+- Manajemen dokumen dan laporan
+- Data visualization dengan Recharts
+- Theme switching (light/dark mode)
+- Responsive design
+
+#### **API Backend** (`apps/api`)
+
+- **Framework**: Fastify
+- **GraphQL**: GraphQL Yoga
+- **Database**: PostgreSQL + Drizzle ORM, MongoDB + Mongoose
+- **Authentication**: JWT + bcryptjs
+- **Validation**: Zod
+
+**Fitur Utama:**
+
+- RESTful API endpoints
+- GraphQL API
+- Database migrations
+- User authentication & authorization
+- Data validation
+
+### 📚 Packages
+
+#### **UI Components** (`packages/ui`)
+
+- Shared React components
+- Reusable UI primitives
+- Consistent design system
+
+#### **ESLint Config** (`packages/eslint-config`)
+
+- Shared ESLint rules
+- Consistent code quality standards
+- Multiple configurations (base, next, react)
+
+#### **TypeScript Config** (`packages/typescript-config`)
+
+- Shared TypeScript configurations
+- Strict type checking
+- Multiple presets (base, nextjs, react-library)
+
+## 🛠️ Scripts
+
+| Script             | Description                                |
+| ------------------ | ------------------------------------------ |
+| `pnpm dev`         | Start all applications in development mode |
+| `pnpm build`       | Build all applications for production      |
+| `pnpm lint`        | Lint all applications and packages         |
+| `pnpm check-types` | Check TypeScript types across all packages |
+| `pnpm format`      | Format code with Prettier                  |
+
+## 🔧 Teknologi
+
+### Frontend Stack
+
+- **Next.js 15** - React framework dengan App Router
+- **React 19** - Latest React dengan concurrent features
+- **TypeScript 5.8** - Type safety
+- **Tailwind CSS v4** - Utility-first CSS framework
+- **Radix UI** - Accessible component primitives
+- **Zustand** - Lightweight state management
+- **Zod** - Schema validation
+- **Recharts** - Data visualization
+- **Lucide React** - Icon library
+
+### Backend Stack
+
+- **Fastify** - Fast web framework
+- **GraphQL Yoga** - GraphQL server
+- **Drizzle ORM** - Type-safe SQL ORM
+- **Mongoose** - MongoDB ODM
+- **PostgreSQL** - Primary database
+- **MongoDB** - Document database
+- **JWT** - Authentication
+- **bcryptjs** - Password hashing
+
+### Development Tools
+
+- **Turborepo** - Monorepo build system
+- **PNPM** - Fast package manager
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **TypeScript** - Type checking
+
+## 📝 Catatan Penting
+
+### 🔐 Environment Variables
+
+**Web App** (`apps/web`):
+
+```env
+# Database
+DATABASE_URL=postgresql://...
+
+# Authentication
+JWT_SECRET=your-secret-key
+NEXTAUTH_SECRET=your-nextauth-secret
+
+# API
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+**API** (`apps/api`):
+
+```env
+# Database
+DATABASE_URL=postgresql://...
+MONGODB_URI=mongodb://...
+
+# Authentication
+JWT_SECRET=your-secret-key
+
+# Server
+PORT=3001
+NODE_ENV=development
+```
+
+### 🚨 Penting untuk Diperhatikan
+
+1. **Node Version**: Pastikan menggunakan Node.js `>=20.11.0`
+2. **Package Manager**: Gunakan PNPM untuk konsistensi
+3. **Database Setup**:
+   - PostgreSQL untuk data utama
+   - MongoDB untuk dokumen
+4. **Environment**: Setup environment variables sebelum menjalankan aplikasi
+5. **Ports**:
+   - Web: `http://localhost:3000`
+   - API: `http://localhost:3001`
+
+### 🔄 Development Workflow
+
+1. **Setup Environment**: Copy `.env.example` ke `.env` dan sesuaikan
+2. **Install Dependencies**: `pnpm install`
+3. **Database Migration**: Setup database dan jalankan migrations
+4. **Start Development**: `pnpm dev`
+5. **Code Quality**: Pastikan linting dan type checking pass
+
+### 🏗️ Architecture Patterns
+
+- **Monorepo**: Menggunakan Turborepo untuk build optimization
+- **Shared Packages**: UI components dan configs di-share antar apps
+- **Type Safety**: TypeScript di semua layer
+- **API First**: Backend API terpisah dari frontend
+- **Component Driven**: UI components yang reusable
+
+### 🎯 Best Practices
+
+1. **Code Quality**: Selalu jalankan `pnpm lint` sebelum commit
+2. **Type Safety**: Gunakan `pnpm check-types` untuk memastikan type safety
+3. **Component Reusability**: Gunakan shared UI components dari `packages/ui`
+4. **Environment Management**: Jangan commit `.env` files
+5. **Database Migrations**: Selalu backup sebelum migration
+
+## 🤝 Contributing
+
+### Development Guidelines
+
+1. **Branch Naming**: `feature/description` atau `fix/description`
+2. **Commit Messages**: Gunakan conventional commits
+3. **Code Review**: Semua PR harus di-review
+4. **Testing**: Pastikan semua tests pass
+5. **Documentation**: Update docs jika ada perubahan
+
+### Commit Message Format
 
 ```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
+type(scope): description
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+[optional body]
+
+[optional footer]
 ```
 
-## Useful Links
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
-Learn more about the power of Turborepo:
+---
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## 📊 Analogi
+
+Bayangkan turborepo ini seperti **kompleks apartemen modern**:
+
+- **Root** = Lobby utama dengan sistem keamanan dan fasilitas umum
+- **Apps** = Unit-unit apartemen (Web Dashboard & API Backend)
+- **Packages** = Fasilitas bersama (UI Components, Configs)
+- **Turborepo** = Sistem manajemen yang mengatur semua unit
+- **PNPM** = Petugas yang mengatur distribusi kebutuhan ke setiap unit
+- **TypeScript** = Standar keamanan yang memastikan semua unit aman
+- **ESLint** = Aturan kebersihan yang menjaga kualitas lingkungan
+
+Setiap unit memiliki fungsi spesifik tapi saling terintegrasi untuk menciptakan pengalaman yang seamless bagi penghuni (users).
+
+---
+
+**Built with ❤️ using modern web technologies**
