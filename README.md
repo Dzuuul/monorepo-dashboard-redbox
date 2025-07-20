@@ -1,282 +1,201 @@
-# 🚀 Dashboard Monorepo Redbox
+# 📘 Dashboard Monorepo Redbox – README & Spesifikasi Teknis
 
-Sebuah turborepo modern yang dibangun dengan **Next.js 15**, **React 19**, dan **TypeScript** untuk dashboard enterprise yang scalable dan maintainable.
+_(Semi-formal, untuk tim & stakeholder)_
 
-## 📋 Daftar Isi
+---
 
-- [🏗️ Struktur Proyek](#️-struktur-proyek)
-- [🚀 Quick Start](#-quick-start)
-- [📦 Aplikasi & Package](#-aplikasi--package)
-- [🛠️ Scripts](#️-scripts)
-- [🔧 Teknologi](#-teknologi)
-- [📝 Catatan Penting](#-catatan-penting)
-- [🤝 Contributing](#-contributing)
+## 1. Gambaran Besar
 
-## 🏗️ Struktur Proyek
+**Dashboard Monorepo Redbox** adalah _single-repo_ berisi dua aplikasi utama:
 
-```
-dashboard-monorepo-redbox/
-├── apps/
-│   ├── api/                 # Backend API (Fastify + GraphQL)
-│   └── web/                 # Frontend Dashboard (Next.js 15)
-├── packages/
-│   ├── eslint-config/       # Shared ESLint configuration
-│   ├── typescript-config/   # Shared TypeScript configuration
-│   └── ui/                  # Shared UI components
-├── turbo.json               # Turborepo configuration
-├── pnpm-workspace.yaml      # PNPM workspace configuration
-└── package.json             # Root package.json
-```
+- **Web Dashboard** – antarmuka bisnis berbasis Next.js 15.
+- **API Backend** – servis data berbasis Fastify, menyediakan **REST** & **GraphQL** sekaligus.
 
-## 🚀 Quick Start
+Semua service hidup dengan satu perintah (`pnpm dev`) dan berbagi komponen, konfigurasi, serta _design system_.
 
-### Prerequisites
+---
 
-- **Node.js**: `>=20.11.0`
-- **PNPM**: `>=10.12.4`
-- **NPM**: `>=10.0.0`
+## 2. Persiapan 2 Menit
 
-### Installation
+| Prasyarat | Versi   | Catatan                           |
+| --------- | ------- | --------------------------------- |
+| Node.js   | ≥ 20.11 | Gunakan `nvm` agar konsisten      |
+| PNPM      | ≥ 10.12 | `corepack enable` otomatis pasang |
 
 ```bash
-# Clone repository
-git clone <repository-url>
+git clone <repo-url>
 cd dashboard-monorepo-redbox
-
-# Install dependencies
 pnpm install
 
-# Start development servers
-pnpm dev
+# salin env
+cp apps/web/.env.example apps/web/.env
+cp apps/api/.env.example apps/api/.env
+# edit value DB_URL, JWT_SECRET, dsb
+
+pnpm dev           # nyalakan semua
 ```
 
-### Development Commands
+Akses:
+
+- Web → http://localhost:3000
+- API → http://localhost:3001
+- GraphQL Playground → http://localhost:3001/graphql
+
+---
+
+## 3. Arsitektur & Teknologi
+
+| Layer             | Teknologi                   | Alasan                                          |
+| ----------------- | --------------------------- | ----------------------------------------------- |
+| **Monorepo**      | Turborepo + PNPM workspaces | Build cepat, dependensi ter-cache               |
+| **Front-end**     | Next.js 15 (App Router)     | SSR/SSG otomatis, React 19                      |
+| **Back-end**      | Fastify 4                   | Ringan, throughput tinggi                       |
+| **Database 1**    | PostgreSQL 16               | ACID, relasional                                |
+| **Database 2**    | MongoDB 7                   | Dokumen fleksibel (file & log)                  |
+| **ORM SQL**       | Drizzle ORM                 | Type-safe, migrasi file-based                   |
+| **ODM NoSQL**     | Mongoose                    | Validasi skema otomatis                         |
+| **GraphQL**       | GraphQL Yoga 5              | Plug-and-play di Fastify                        |
+| **Auth**          | JWT (bcryptjs)              | Stateless & mudah di-scale                      |
+| **UI Library**    | Radix UI + Tailwind CSS v4  | Aksesibilitas + utility-first                   |
+| **State**         | Zustand                     | Kecil, tanpa boilerplate                        |
+| **Data Fetching** | TanStack Query              | Query data efisien, caching, auto-refetch       |
+| **Data Table**    | TanStack Table              | Tabel interaktif, scalable hingga milyaran data |
+| **Realtime**      | WebSocket                   | Notifikasi push & update data real-time         |
+| **Validasi**      | Zod                         | Satu skema buat FE & BE                         |
+
+---
+
+## 4. Struktur Folder (Turbo-aware)
+
+```
+dashboard-monorepo-redbox
+├── apps
+│   ├── web/                 # Next.js 15 dashboard
+│   │   ├── app/             # App Router
+│   │   ├── components/      # Komponen lokal
+│   │   └── lib/             # API client & helpers
+│   └── api/                 # Fastify server
+│       ├── src/
+│       │   ├── routes/      # REST endpoint files
+│       │   ├── graphql/     # GraphQL schema & resolver
+│       │   ├── db/          # Drizzle schema & seed
+│       │   └── plugins/     # Fastify plugin (auth, cors)
+├── packages
+│   ├── ui/                  # Reusable React components
+│   ├── eslint-config/       # Shared ESLint preset
+│   ├── typescript-config/   # Shared tsconfig
+│   └── (soon) utils/        # Helper universal
+├── turbo.json               # Pipeline caching
+└── pnpm-workspace.yaml      # Definisi workspace
+```
+
+---
+
+## 5. Spesifikasi Fitur
+
+| Modul                 | Fitur                                                    | Teknologi                                         |
+| --------------------- | -------------------------------------------------------- | ------------------------------------------------- |
+| **Autentikasi**       | Register, Login, Refresh Token, RBAC                     | JWT, bcryptjs, Zod                                |
+| **Dashboard**         | Drag-n-drop widget, real-time chart, tabel milyaran data | Recharts, Zustand, TanStack Table, TanStack Query |
+| **Manajemen Dokumen** | Upload PDF/Excel, preview inline                         | MongoDB GridFS                                    |
+| **Laporan**           | Filter multi-kriteria, export CSV                        | PostgreSQL view & procedure                       |
+| **Notifikasi**        | Toast & push in-app, real-time websocket                 | React Hot-toast, WebSocket                        |
+| **Theme**             | Light / Dark / Auto                                      | Tailwind CSS + next-themes                        |
+
+---
+
+## 6. REST API – Quick Reference
+
+Base URL: `http://localhost:3001/api`
+
+| Endpoint             | Method | Auth   | Request                 | Response       |
+| -------------------- | ------ | ------ | ----------------------- | -------------- |
+| `/api/auth/register` | POST   | ❌     | `{name,email,password}` | `{token,user}` |
+| `/api/auth/login`    | POST   | ❌     | `{email,password}`      | `{token,user}` |
+| `/api/users`         | GET    | ✅ JWT | –                       | `User[]`       |
+| `/api/reports`       | GET    | ✅ JWT | `?from&to`              | `Report[]`     |
+| `/api/reports/:id`   | GET    | ✅ JWT | –                       | `Report`       |
+| `/api/files`         | POST   | ✅ JWT | `multipart/form-data`   | `{fileId}`     |
+
+**Contoh request (cURL)**
 
 ```bash
-# Start all applications in development mode
-pnpm dev
-
-# Build all applications
-pnpm build
-
-# Lint all applications
-pnpm lint
-
-# Check TypeScript types
-pnpm check-types
-
-# Format code
-pnpm format
+curl -H "Authorization: Bearer <token>" \
+     http://localhost:3001/api/reports?from=2024-01-01&to=2024-12-31
 ```
-
-## 📦 Aplikasi & Package
-
-### 🖥️ Apps
-
-#### **Web Dashboard** (`apps/web`)
-
-- **Framework**: Next.js 15 dengan Turbopack
-- **UI Library**: React 19 + Radix UI
-- **Styling**: Tailwind CSS v4
-- **State Management**: Zustand
-- **Validation**: Zod
-- **Port**: 3000
-
-**Fitur Utama:**
-
-- Dashboard interaktif dengan drag & drop
-- Sistem autentikasi
-- Manajemen dokumen dan laporan
-- Data visualization dengan Recharts
-- Theme switching (light/dark mode)
-- Responsive design
-
-#### **API Backend** (`apps/api`)
-
-- **Framework**: Fastify
-- **GraphQL**: GraphQL Yoga
-- **Database**: PostgreSQL + Drizzle ORM, MongoDB + Mongoose
-- **Authentication**: JWT + bcryptjs
-- **Validation**: Zod
-
-**Fitur Utama:**
-
-- RESTful API endpoints
-- GraphQL API
-- Database migrations
-- User authentication & authorization
-- Data validation
-
-### 📚 Packages
-
-#### **UI Components** (`packages/ui`)
-
-- Shared React components
-- Reusable UI primitives
-- Consistent design system
-
-#### **ESLint Config** (`packages/eslint-config`)
-
-- Shared ESLint rules
-- Consistent code quality standards
-- Multiple configurations (base, next, react)
-
-#### **TypeScript Config** (`packages/typescript-config`)
-
-- Shared TypeScript configurations
-- Strict type checking
-- Multiple presets (base, nextjs, react-library)
-
-## 🛠️ Scripts
-
-| Script             | Description                                |
-| ------------------ | ------------------------------------------ |
-| `pnpm dev`         | Start all applications in development mode |
-| `pnpm build`       | Build all applications for production      |
-| `pnpm lint`        | Lint all applications and packages         |
-| `pnpm check-types` | Check TypeScript types across all packages |
-| `pnpm format`      | Format code with Prettier                  |
-
-## 🔧 Teknologi
-
-### Frontend Stack
-
-- **Next.js 15** - React framework dengan App Router
-- **React 19** - Latest React dengan concurrent features
-- **TypeScript 5.8** - Type safety
-- **Tailwind CSS v4** - Utility-first CSS framework
-- **Radix UI** - Accessible component primitives
-- **Zustand** - Lightweight state management
-- **Zod** - Schema validation
-- **Recharts** - Data visualization
-- **Lucide React** - Icon library
-
-### Backend Stack
-
-- **Fastify** - Fast web framework
-- **GraphQL Yoga** - GraphQL server
-- **Drizzle ORM** - Type-safe SQL ORM
-- **Mongoose** - MongoDB ODM
-- **PostgreSQL** - Primary database
-- **MongoDB** - Document database
-- **JWT** - Authentication
-- **bcryptjs** - Password hashing
-
-### Development Tools
-
-- **Turborepo** - Monorepo build system
-- **PNPM** - Fast package manager
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **TypeScript** - Type checking
-
-## 📝 Catatan Penting
-
-### 🔐 Environment Variables
-
-**Web App** (`apps/web`):
-
-```env
-# Database
-DATABASE_URL=postgresql://...
-
-# Authentication
-JWT_SECRET=your-secret-key
-NEXTAUTH_SECRET=your-nextauth-secret
-
-# API
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-**API** (`apps/api`):
-
-```env
-# Database
-DATABASE_URL=postgresql://...
-MONGODB_URI=mongodb://...
-
-# Authentication
-JWT_SECRET=your-secret-key
-
-# Server
-PORT=3001
-NODE_ENV=development
-```
-
-### 🚨 Penting untuk Diperhatikan
-
-1. **Node Version**: Pastikan menggunakan Node.js `>=20.11.0`
-2. **Package Manager**: Gunakan PNPM untuk konsistensi
-3. **Database Setup**:
-   - PostgreSQL untuk data utama
-   - MongoDB untuk dokumen
-4. **Environment**: Setup environment variables sebelum menjalankan aplikasi
-5. **Ports**:
-   - Web: `http://localhost:3000`
-   - API: `http://localhost:3001`
-
-### 🔄 Development Workflow
-
-1. **Setup Environment**: Copy `.env.example` ke `.env` dan sesuaikan
-2. **Install Dependencies**: `pnpm install`
-3. **Database Migration**: Setup database dan jalankan migrations
-4. **Start Development**: `pnpm dev`
-5. **Code Quality**: Pastikan linting dan type checking pass
-
-### 🏗️ Architecture Patterns
-
-- **Monorepo**: Menggunakan Turborepo untuk build optimization
-- **Shared Packages**: UI components dan configs di-share antar apps
-- **Type Safety**: TypeScript di semua layer
-- **API First**: Backend API terpisah dari frontend
-- **Component Driven**: UI components yang reusable
-
-### 🎯 Best Practices
-
-1. **Code Quality**: Selalu jalankan `pnpm lint` sebelum commit
-2. **Type Safety**: Gunakan `pnpm check-types` untuk memastikan type safety
-3. **Component Reusability**: Gunakan shared UI components dari `packages/ui`
-4. **Environment Management**: Jangan commit `.env` files
-5. **Database Migrations**: Selalu backup sebelum migration
-
-## 🤝 Contributing
-
-### Development Guidelines
-
-1. **Branch Naming**: `feature/description` atau `fix/description`
-2. **Commit Messages**: Gunakan conventional commits
-3. **Code Review**: Semua PR harus di-review
-4. **Testing**: Pastikan semua tests pass
-5. **Documentation**: Update docs jika ada perubahan
-
-### Commit Message Format
-
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 
 ---
 
-## 📊 Analogi
+## 7. GraphQL – Quick Reference
 
-Bayangkan turborepo ini seperti **kompleks apartemen modern**:
+Endpoint: `http://localhost:3001/graphql`
 
-- **Root** = Lobby utama dengan sistem keamanan dan fasilitas umum
-- **Apps** = Unit-unit apartemen (Web Dashboard & API Backend)
-- **Packages** = Fasilitas bersama (UI Components, Configs)
-- **Turborepo** = Sistem manajemen yang mengatur semua unit
-- **PNPM** = Petugas yang mengatur distribusi kebutuhan ke setiap unit
-- **TypeScript** = Standar keamanan yang memastikan semua unit aman
-- **ESLint** = Aturan kebersihan yang menjaga kualitas lingkungan
+**Skema utama**
 
-Setiap unit memiliki fungsi spesifik tapi saling terintegrasi untuk menciptakan pengalaman yang seamless bagi penghuni (users).
+```graphql
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: Role!
+}
+type Report {
+  id: ID!
+  title: String!
+  metrics: [Metric!]!
+  createdAt: DateTime!
+}
+type Query {
+  users: [User!]!
+  reports(filter: ReportFilter): [Report!]!
+}
+type Mutation {
+  login(email: String!, password: String!): AuthPayload!
+  createReport(input: ReportInput!): Report!
+}
+```
+
+**Contoh client (fetch native)**
+
+```ts
+const query = `
+  query ($from: DateTime!, $to: DateTime!) {
+    reports(filter: { from: $from, to: $to }) {
+      id
+      title
+      createdAt
+    }
+  }`;
+const res = await fetch("/graphql", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query, variables: { from, to } }),
+});
+```
 
 ---
 
-**Built with ❤️ using modern web technologies**
+## 8. Environment Variables
+
+| File            | Key                   | Contoh                                         | Kegunaan     |
+| --------------- | --------------------- | ---------------------------------------------- | ------------ |
+| `apps/web/.env` | `NEXT_PUBLIC_API_URL` | `http://localhost:3001`                        | Base API FE  |
+| `apps/api/.env` | `DATABASE_URL`        | `postgresql://user:pass@localhost:5432/redbox` | PostgreSQL   |
+|                 | `MONGODB_URI`         | `mongodb://localhost:27017/redbox`             | MongoDB      |
+|                 | `JWT_SECRET`          | `super-secret-string`                          | Sign JWT     |
+|                 | `PORT`                | `3001`                                         | Port Fastify |
+
+---
+
+## 9. Perintah Penting
+
+| Tujuan              | Command                         |
+| ------------------- | ------------------------------- |
+| Dev semua           | `pnpm dev`                      |
+| Build produksi      | `pnpm build`                    |
+| Migrasi DB          | `pnpm --filter api db:push`     |
+| Seed data dev       | `pnpm --filter api db:seed`     |
+| Lint + type check   | `pnpm lint && pnpm check-types` |
+| UI storybook (soon) | `pnpm --filter ui storybook`    |
+
+---

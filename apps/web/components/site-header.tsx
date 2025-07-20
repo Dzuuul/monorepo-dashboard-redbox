@@ -72,11 +72,13 @@ export function SiteHeader() {
       };
 
       const label =
-        labelMap[segment] ||
-        segment
-          .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
+        (segment && labelMap[segment]) ||
+        (segment
+          ? segment
+              .split("-")
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
+          : "");
 
       items.push({
         label,
