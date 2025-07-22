@@ -10,24 +10,27 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "drizzle:generate": "drizzle-kit generate:pg",
+    "drizzle:generate": "drizzle-kit generate",
     "drizzle:push": "drizzle-kit push:pg"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
-    "drizzle-kit": "0.24.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^17.2.0",
+    "dotenv-cli": "^8.0.0",
+    "drizzle-kit": "0.31.4",
     "drizzle-orm": "^0.44.3",
+    "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "turbo": "^2.5.5",
-    "typescript": "5.8.3",
-    "npm-run-all": "^4.1.5"
+    "typescript": "5.8.3"
   },
   "packageManager": "pnpm@10.12.4",
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "next": "15.4.2-canary.10",
+    "next": "15.4.2",
     "zod": "^4.0.5"
   }
 }
