@@ -21,4 +21,4 @@ process.env.PORT = port;
 
 console.log('PORT yang akan dipakai:', process.env.PORT);
 
-execSync('next dev', { stdio: 'inherit', env: process.env }); 
+execSync('next dev --turbopack', { stdio: 'inherit', env: process.env }); 

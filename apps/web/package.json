@@ -15,7 +15,7 @@
   "scripts": {
     "preinstall": "node scripts/check-node-version.js",
     "predev": "node scripts/check-node-version.js",
-    "dev": "cross-env-shell PORT=${WEB_PORT:-3000} next dev --turbopack --port $PORT",
+    "dev": "node scripts/start-with-web-port.js",
     "dev:win": "node scripts/start-with-web-port.js",
     "build": "next build",
     "start": "next start",
