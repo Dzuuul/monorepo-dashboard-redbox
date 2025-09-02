@@ -13,8 +13,18 @@ import { useThemeStore } from "../lib/theme-store";
 
 export function ThemeSelector() {
   const { theme, setTheme } = useThemeStore();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const getThemeIcon = () => {
+    if (!mounted) {
+      // Return a consistent icon during SSR to prevent hydration mismatch
+      return <Sun className="h-4 w-4" />;
+    }
+
     switch (theme) {
       case "light":
         return <Sun className="h-4 w-4" />;
@@ -23,7 +33,7 @@ export function ThemeSelector() {
       case "system":
         return <Monitor className="h-4 w-4" />;
       default:
-        return <Monitor className="h-4 w-4" />;
+        return <Sun className="h-4 w-4" />;
     }
   };
 

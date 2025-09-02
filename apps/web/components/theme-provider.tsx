@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useThemeStore } from "../lib/theme-store";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -8,8 +8,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const prevThemeRef = useRef<string | null>(null);
   const prevColorRef = useRef<string | null>(null);
   const prevFontRef = useRef<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const root = window.document.documentElement;
     const body = window.document.body;
 
@@ -93,7 +100,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     }
-  }, [theme, color, font, tempColor, tempFont]);
+  }, [theme, color, font, tempColor, tempFont, mounted]);
 
   return <>{children}</>;
 }

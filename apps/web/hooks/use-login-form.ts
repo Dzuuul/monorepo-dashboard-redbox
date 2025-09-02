@@ -3,6 +3,7 @@ import {
   loginSchema,
   type LoginFormData,
   validateForm,
+  validateField,
 } from "../lib/validations/auth";
 
 export const useLoginForm = () => {
@@ -18,12 +19,14 @@ export const useLoginForm = () => {
     (field: keyof LoginFormData, value: string) => {
       setFormData((prev) => ({ ...prev, [field]: value }));
 
-      // Clear error when user starts typing
-      if (errors[field]) {
-        setErrors((prev) => ({ ...prev, [field]: undefined }));
-      }
+      // Real-time validation
+      const fieldError = validateField(loginSchema, field, value);
+      setErrors((prev) => ({
+        ...prev,
+        [field]: fieldError || undefined,
+      }));
     },
-    [errors]
+    []
   );
 
   const validateFormData = useCallback(() => {

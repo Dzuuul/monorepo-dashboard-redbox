@@ -2,8 +2,17 @@ import { z } from "zod";
 
 // Schema untuk validasi login form
 export const loginSchema = z.object({
-  username: z.string().min(1, "Username tidak boleh kosong"),
-  password: z.string().min(1, "Password tidak boleh kosong"),
+  username: z
+    .string()
+    .min(1, "Username tidak boleh kosong")
+    .min(3, "Username minimal 3 karakter")
+    .max(50, "Username maksimal 50 karakter")
+    .regex(/^[a-zA-Z0-9_]+$/, "Username hanya boleh berisi huruf, angka, dan underscore"),
+  password: z
+    .string()
+    .min(1, "Password tidak boleh kosong")
+    .min(6, "Password minimal 6 karakter")
+    .max(100, "Password maksimal 100 karakter"),
 });
 
 // Type untuk login form data
@@ -43,7 +52,7 @@ export const validateForm = <T>(
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errors: Record<string, string> = {};
-      error.errors.forEach((err) => {
+      error.issues.forEach((err) => {
         if (err.path[0]) {
           errors[err.path[0] as string] = err.message;
         }
@@ -54,5 +63,25 @@ export const validateForm = <T>(
       success: false,
       errors: { general: "Terjadi kesalahan validasi" },
     };
+  }
+};
+
+// Utility function untuk validasi field individual
+export const validateField = (
+  schema: z.ZodSchema<unknown>,
+  field: string,
+  value: string
+): string | null => {
+  try {
+    // Create a partial object with only the field being validated
+    const partialData = { [field]: value };
+    schema.parse(partialData);
+    return null; // Valid
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const fieldError = error.issues.find((err) => err.path[0] === field);
+      return fieldError ? fieldError.message : null;
+    }
+    return "Terjadi kesalahan validasi";
   }
 };

@@ -108,6 +108,7 @@ export function LoginForm({
                 </div>
                 <Button
                   type="submit"
+                  variant="destructive"
                   className="w-full mt-5"
                   disabled={isSubmitting}
                 >

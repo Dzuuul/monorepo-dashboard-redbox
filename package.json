@@ -11,7 +11,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "drizzle:generate": "drizzle-kit generate",
-    "drizzle:push": "drizzle-kit push:pg"
+    "drizzle:push": "drizzle-kit push:pg",
+    "seed": "pnpm --filter ./apps/api seed"
   },
   "devDependencies": {
     "@types/node": "^24.0.15",
